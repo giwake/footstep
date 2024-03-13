@@ -1,0 +1,88 @@
+version "4.11"
+
+class WalkSoundPlayer : PlayerPawn
+{
+
+	Default {
+	
+		Player.DisplayName "EYYYY I'M WALKIN EREEEE";
+	}
+	double oldvel; //for viewroll when landing
+	Double StepTimer; //time between steps
+	Bool LandSound; //play step when landing
+	override void Tick()
+	{
+		//reset player roll
+		player.mo.roll = player.mo.roll * 0.9;
+		//a_logint(player.mo.roll);
+		
+		//footstep system
+		if (health > 0) {
+		if (player.onground) 
+				{
+					if (LandSound == false) {
+						LandSound = true;
+						{
+							let t = GetFloorTerrain();
+							if (t.IsLiquid == 0) { //play landing sound only when landing on not water
+								
+								if (!t.RightStepSound) { //failsafe, if no step sound is defined, switch to default.
+								//for some reason zdoom doesn't like it if you try to define a step sound in
+								//the default terrain.
+									A_StartSound("player/step", 65 , 0, (0-(oldvel*0.1)));
+								} else {
+									A_StartSound(t.RightStepSound, 65 , 0, (0-(oldvel*0.1)));
+								}
+								//A_LogFloat(oldvel);
+								if (oldvel < -5.75) {
+									if (random(0,100) > 50) {
+										player.mo.roll = (oldvel*0.2);
+									} else {
+										player.mo.roll = (0-(oldvel*0.2));
+									}
+								
+									
+								}
+							}
+						}
+					}
+					
+					if (vel.length() > 0.0) {
+						let t = GetFloorTerrain();
+						if (t.IsLiquid == false) {
+							if (StepTimer <= 0){
+								if (!t.RightStepSound) { //failsafe, if no step sound is defined, switch to default
+									A_StartSound("player/step", 65 , 0, (vel.length()/20));
+								} else {
+									A_StartSound(t.RightStepSound, 65 , 0, (vel.length()/20));
+								}
+								StepTimer = (24 - (vel.length())); //reset step timer - velocity 
+								//running faster should result in faster footsteps!
+							} else {
+								StepTimer --;
+								//A_LogInt(StepTimer);
+								//A_LogInt(vel.length());
+							}
+						} else {
+							if (StepTimer <= 0){
+								A_StartSound("player/swim", 65 , 0, (vel.length()/20));
+								StepTimer = (32 - (vel.length()/2)); //reset step timer - velocity 
+								//running faster should result in faster footsteps!
+							} else {
+								StepTimer --;
+								//A_LogInt(StepTimer);
+								//A_LogInt(vel.length());
+							}
+						}
+					}
+					
+				} else {
+					LandSound = false;
+					oldvel = vel.Z;
+				}
+		}
+		
+
+		Super.Tick();
+	}
+}

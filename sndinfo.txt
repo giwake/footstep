@@ -1,0 +1,12 @@
+player/step1			WALK1
+player/step2			WALK2
+player/step3			WALK3
+player/step4			WALK4
+$random player/step {player/step1 player/step2 player/step3 player/step4}
+
+player/swim1			swim1
+player/swim2			swim2
+player/swim3			swim3
+player/swim4			swim4
+
+$random player/swim {player/swim1 player/swim2 player/swim3 player/swim4}
