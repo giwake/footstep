@@ -8,3 +8,6 @@ terrain MyCoolTerrain
 ```
 
 [A video demonstrating the footstep system, as well as the view roll when landing is available here](https://file.garden/ZeqLdBGi9H-cAZ8I/bandicam%202024-03-14%2001-03-45-881.mp4)
+
+LICENSE:
+If you use this in a project, please give me credit! Also, send it to me so I can check it out! :3c
